@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet,Text,View, ListView} from 'react-native';
+import {StyleSheet,Text,View,TouchableNativeFeedback} from 'react-native';
 import Config from '../config.json';
 import Login from './login';
 
 export default class Menu extends Component {
-    logon(){
-        console.log('Menu.logon');
-        styles.login.height = 200;
-    }
-
     render() {
         return (
             <View style={styles.container}>
@@ -17,12 +12,10 @@ export default class Menu extends Component {
                         Menu
                     </Text>
                 </View>
-                <View style={styles.item}>
+                <View>
                     <Text style={styles.itemText}>Item1</Text>
                 </View>
-                <View style={styles.login}>
-                    <Login onClick={this.logon}/>
-                </View>
+                <Login/>
             </View>
         );
     }
@@ -52,10 +45,5 @@ const styles = StyleSheet.create({
     },
     itemText: {
         color: '#ffffff'
-    },
-
-    ////////// Login //////////
-    login: {
-        flex: .1
     }
 });
