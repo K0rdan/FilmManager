@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet,Text,View, TouchableNativeFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {StyleSheet,Text,View, TouchableNativeFeedback, TextInput} from 'react-native';
 
 export default class Login extends Component {
     constructor(props) {
@@ -10,9 +10,16 @@ export default class Login extends Component {
         };
     }
 
-    onPress() {
-        this.setState({open: !this.state.open});
-        console.log("open", this.state.open);
+    onValidate(){
+        console.log("Validate");
+    }
+
+    onCancel(){ this.onPress(); }
+
+    onPress() {  
+        let tmp = (this.state.open ? false : true);
+        this.setState({open: tmp});
+        this.props.onPress(tmp);
     }
 
     renderClose() {
@@ -23,7 +30,7 @@ export default class Login extends Component {
                     background={TouchableNativeFeedback.Ripple('red', false)}>
                     <View>
                         <Text>
-                            Login
+                            Login 
                         </Text>
                         <Icon name="md-power" size={30} color="#fff" />
                     </View>
@@ -35,16 +42,41 @@ export default class Login extends Component {
     renderOpen() {
         return (
             <View style={styles.containerOpen}>
-                <Text>
-                    Login open
-                </Text>
+                <View style={styles.formField}>
+                    <Text style={{width:75}}>Login</Text>
+                    <TextInput style={{flex:1}} placeholder="Type here to translate!" onChangeText={(text) => this.setState({text})}/>
+                </View>
+                <View style={styles.formField}>
+                    <Text style={{width:75}}>Password</Text>
+                    <TextInput style={{flex:1}}  onChangeText={(password) => this.setState({password})}/>
+                </View>
+                <View style={styles.formField}>
+                    <TouchableNativeFeedback
+                        onPress={this.onValidate.bind(this)}
+                        background={TouchableNativeFeedback.Ripple('red', false)}>
+                        <View style={{backgroundColor:'red', width:200, height:100}}>
+                            <Text>
+                                Login 
+                            </Text>
+                        </View>
+                    </TouchableNativeFeedback>
+                    <TouchableNativeFeedback
+                        onPress={this.onCancel.bind(this)}
+                        background={TouchableNativeFeedback.Ripple('red', false)}>
+                        <View>
+                            <Text>
+                                Annuler 
+                            </Text>
+                        </View>
+                    </TouchableNativeFeedback>
+                </View>
             </View>
         );
     }
 
     render() {
         return (
-            <View>
+            <View style={[styles.container, {flex: (this.state.open ? .4: .1)}]}>
                 {this.state.open ? this.renderOpen() : this.renderClose()}
             </View>
         );
@@ -52,12 +84,20 @@ export default class Login extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'blue'
+    },
     containerOpen: {
-        flex: 1,
+        flex:1,
         backgroundColor: 'yellow'
     },
     containerClose: {
-        flex: .5,
+        flex:1,
         backgroundColor: 'green'
+    },
+    formField: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     }
 });

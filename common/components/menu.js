@@ -4,28 +4,42 @@ import Config from '../config.json';
 import Login from './login';
 
 export default class Menu extends Component {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            loginOpen: false
+        };
+    }
+
+    onPressLogin(isOpen) {
+        this.setState({
+            loginOpen: isOpen
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.title}>
-                    <Text style={styles.titleText}>
-                        Menu
-                    </Text>
+                <View style={{flex:1,flexDirection: 'column',backgroundColor: '#666666'}}>
+                    <View style={{flex:.1}}>
+                        <Text style={styles.titleText}>
+                            Menu
+                        </Text>
+                    </View>
+                    <View style={[styles.items, {flex: (this.state.loginOpen ? .5 : .8)}]}>
+                        <Text style={styles.itemText}>Item1</Text>
+                    </View>
+                    <Login  onPress={this.onPressLogin.bind(this)}/>
                 </View>
-                <View>
-                    <Text style={styles.itemText}>Item1</Text>
-                </View>
-                <Login/>
-            </View>
+            </View>           
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        flexDirection: 'column',
-        backgroundColor: '#666666'
+        flex:.25,
     },
 
     ////////// Title //////////
@@ -39,8 +53,7 @@ const styles = StyleSheet.create({
     },
 
     ////////// Item //////////
-    item: {
-        flex: .8,
+    items: {
         backgroundColor: '#00ff00'
     },
     itemText: {

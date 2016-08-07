@@ -11,9 +11,7 @@ class FilmManager extends Component {
 	render() {
     return (
       <View style={styles.container}>
-        <View style={{flex:.25}}>
-          <Menu />
-        </View>
+        <Menu />
         <Text style={styles.content}>
           Main
         </Text>
