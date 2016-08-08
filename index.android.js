@@ -1,33 +1,39 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
+  Navigator,
   View
 } from 'react-native';
-import Menu from './common/components/menu';
+import Routes from './common/routes';
+import Notification from './common/components/notification';
 
 class FilmManager extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showNotification: false
+    };
+  }
+
+  renderScene(route, navigator) {
+    return React.createElement(route.component, {...route.props, navigator: navigator, notification: {
+      show: this.showNotification.bind(this)
+    }});
+  }
+
+  showNotification() {
+    this.setState({showNotification: true});
+  }
+
 	render() {
     return (
-      <View style={styles.container}>
-        <Menu />
-        <Text style={styles.content}>
-          Main
-        </Text>
+      <View style={{flex:1}}>
+        <Navigator initialRoute={Routes.Home} renderScene={this.renderScene.bind(this)} />
+        {this.state.showNotification ? <Notification /> : null}
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  content: {
-    flex: .75
-  }
-});
 
 AppRegistry.registerComponent('FilmManager', () => FilmManager);

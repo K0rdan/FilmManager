@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {StyleSheet,Text,View, TouchableNativeFeedback, TextInput} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class Login extends Component {
     constructor(props) {
@@ -11,7 +11,10 @@ export default class Login extends Component {
     }
 
     onValidate(){
-        console.log("Validate");
+        if(!this.state.login || !this.state.password){
+            // Show a notification
+            this.props.notification.show();
+        }
     }
 
     onCancel(){ this.onPress(); }
@@ -44,11 +47,11 @@ export default class Login extends Component {
             <View style={styles.containerOpen}>
                 <View style={styles.formField}>
                     <Text style={{width:75}}>Login</Text>
-                    <TextInput style={{flex:1}} placeholder="Type here to translate!" onChangeText={(text) => this.setState({text})}/>
+                    <TextInput style={{flex:1}} placeholder="Type here to translate!" onChangeText={(text) => this.setState({login: text})}/>
                 </View>
                 <View style={styles.formField}>
                     <Text style={{width:75}}>Password</Text>
-                    <TextInput style={{flex:1}}  onChangeText={(password) => this.setState({password})}/>
+                    <TextInput style={{flex:1}}  onChangeText={(password) => this.setState({password: password})}/>
                 </View>
                 <View style={styles.formField}>
                     <TouchableNativeFeedback

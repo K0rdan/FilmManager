@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet,Text,View,TouchableNativeFeedback} from 'react-native';
+import {StyleSheet,Text,View} from 'react-native';
 import Config from '../config.json';
 import Login from './login';
 
@@ -30,7 +30,7 @@ export default class Menu extends Component {
                     <View style={[styles.items, {flex: (this.state.loginOpen ? .5 : .8)}]}>
                         <Text style={styles.itemText}>Item1</Text>
                     </View>
-                    <Login  onPress={this.onPressLogin.bind(this)}/>
+                    <Login navigator={this.props.navigator} notification={this.props.notification} onPress={this.onPressLogin.bind(this)}/>
                 </View>
             </View>           
         );
