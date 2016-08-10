@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet,Text,View, TouchableNativeFeedback, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import NotificationType from './notification/notificationType';
 
 export default class Login extends Component {
     constructor(props) {
@@ -13,7 +14,11 @@ export default class Login extends Component {
     onValidate(){
         if(!this.state.login || !this.state.password){
             // Show a notification
-            this.props.notification.show();
+            let notification = {
+                type: NotificationType.ERROR,
+                msg: 'TEST'
+            }
+            this.props.notificationList.show(notification);
         }
     }
 

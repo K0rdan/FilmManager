@@ -5,32 +5,39 @@ import {
   View
 } from 'react-native';
 import Routes from './common/routes';
-import Notification from './common/components/notification';
+import NotificationList from './common/components/notification/notificationList';
 
 class FilmManager extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showNotification: false
+      showNotificationList: false,
+      notifications: []
     };
   }
 
   renderScene(route, navigator) {
-    return React.createElement(route.component, {...route.props, navigator: navigator, notification: {
-      show: this.showNotification.bind(this)
+    return React.createElement(route.component, {...route.props, navigator: navigator, notificationList: {
+      show: this.showNotificationList.bind(this)
     }});
   }
 
-  showNotification() {
-    this.setState({showNotification: true});
+  showNotificationList(notification) {
+    if(notification) {
+      // notification arg is set
+      let notifications = this.state.notifications;
+      notifications.push(notification);
+      this.setState({notifications: notifications});
+    }
+    this.setState({showNotificationList: true});
   }
 
 	render() {
     return (
       <View style={{flex:1}}>
         <Navigator initialRoute={Routes.Home} renderScene={this.renderScene.bind(this)} />
-        {this.state.showNotification ? <Notification /> : null}
+        {this.state.showNotificationList ? <NotificationList datasource={this.state.notifications}/> : null}
       </View>
     );
   }

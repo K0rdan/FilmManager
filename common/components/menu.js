@@ -30,7 +30,7 @@ export default class Menu extends Component {
                     <View style={[styles.items, {flex: (this.state.loginOpen ? .5 : .8)}]}>
                         <Text style={styles.itemText}>Item1</Text>
                     </View>
-                    <Login navigator={this.props.navigator} notification={this.props.notification} onPress={this.onPressLogin.bind(this)}/>
+                    <Login navigator={this.props.navigator} notificationList={this.props.notificationList} onPress={this.onPressLogin.bind(this)}/>
                 </View>
             </View>           
         );

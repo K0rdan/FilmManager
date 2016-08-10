@@ -6,7 +6,7 @@ export default class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Menu navigator={this.props.navigator} notification={this.props.notification}/>
+                <Menu navigator={this.props.navigator} notificationList={this.props.notificationList}/>
                 <Text style={styles.content}>
                     Main
                 </Text>
