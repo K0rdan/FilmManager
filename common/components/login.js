@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet,Text,View, TouchableNativeFeedback, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NotificationType from './notification/notificationType';
+import Error from './../error';
 
 export default class Login extends Component {
     constructor(props) {
@@ -16,9 +17,10 @@ export default class Login extends Component {
             // Show a notification
             let notification = {
                 type: NotificationType.ERROR,
-                msg: 'TEST'
+                msg: Error.LOGIN.EMPTY
             }
-            this.props.notificationList.show(notification);
+            this.props.notificationList.notifications.push(notification);
+            this.props.notificationList.show();
         }
     }
 

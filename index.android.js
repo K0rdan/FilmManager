@@ -19,25 +19,23 @@ class FilmManager extends Component {
 
   renderScene(route, navigator) {
     return React.createElement(route.component, {...route.props, navigator: navigator, notificationList: {
+      notifications: this.state.notifications,
       show: this.showNotificationList.bind(this)
     }});
   }
 
-  showNotificationList(notification) {
-    if(notification) {
-      // notification arg is set
-      let notifications = this.state.notifications;
-      notifications.push(notification);
-      this.setState({notifications: notifications});
-    }
+  showNotificationList() {
     this.setState({showNotificationList: true});
+  }
+  hideNotificationList() {
+    this.setState({showNotificationList: false});
   }
 
 	render() {
     return (
       <View style={{flex:1}}>
         <Navigator initialRoute={Routes.Home} renderScene={this.renderScene.bind(this)} />
-        {this.state.showNotificationList ? <NotificationList datasource={this.state.notifications}/> : null}
+        {this.state.showNotificationList ? <NotificationList datasource={this.state.notifications} hide={this.hideNotificationList.bind(this)}/> : null}
       </View>
     );
   }

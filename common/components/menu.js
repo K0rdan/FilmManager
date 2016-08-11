@@ -27,9 +27,9 @@ export default class Menu extends Component {
         };
 
         if(this.props.notificationList){
-            let notifs = this.props.notificationList;
+            let notifs = this.props.notificationList.notifications;
             for(let i=0; i<notifs.length; i++) {
-                switch(notifs.type) {
+                switch(notifs[i].type) {
                     case NotificationType.ERROR: notifications.error++; break;
                     case NotificationType.WARNING: notifications.warning++; break;
                     case NotificationType.INFO: notifications.info++; break;
