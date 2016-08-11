@@ -38,11 +38,9 @@ export default class Login extends Component {
                 <TouchableNativeFeedback
                     onPress={this.onPress.bind(this)}
                     background={TouchableNativeFeedback.Ripple('red', false)}>
-                    <View>
-                        <Text>
-                            Login 
-                        </Text>
-                        <Icon name="md-power" size={30} color="#fff" />
+                    <View style={styles.openButton}>
+                        <Text style={styles.openButtonText}>Login</Text>
+                        <Icon name="md-power" size={30} color="#000000" />
                     </View>
                 </TouchableNativeFeedback>
             </View>
@@ -52,31 +50,30 @@ export default class Login extends Component {
     renderOpen() {
         return (
             <View style={styles.containerOpen}>
-                <View style={styles.formField}>
-                    <Text style={{width:75}}>Login</Text>
-                    <TextInput style={{flex:1}} placeholder="Type here to translate!" onChangeText={(text) => this.setState({login: text})}/>
+                <View style={stylesOpen.header}>
+                    <Text style={stylesOpen.headerText}>Login</Text>
                 </View>
-                <View style={styles.formField}>
-                    <Text style={{width:75}}>Password</Text>
+                <View style={stylesOpen.formField}>
+                    <Text style={stylesOpen.formFieldText}>Identifiant</Text>
+                    <TextInput style={{flex:1}} onChangeText={(text) => this.setState({login: text})}/>
+                </View>
+                <View style={stylesOpen.formField}>
+                    <Text style={stylesOpen.formFieldText}>Password</Text>
                     <TextInput style={{flex:1}}  onChangeText={(password) => this.setState({password: password})}/>
                 </View>
-                <View style={styles.formField}>
+                <View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
                     <TouchableNativeFeedback
                         onPress={this.onValidate.bind(this)}
                         background={TouchableNativeFeedback.Ripple('red', false)}>
-                        <View style={{backgroundColor:'red', width:200, height:100}}>
-                            <Text>
-                                Login 
-                            </Text>
+                        <View style={{flex:.5, borderRightColor:'#000', borderRightWidth:1}}>
+                            <Text style={{textAlign:'center', fontWeight:'bold'}}>Connexion</Text>
                         </View>
                     </TouchableNativeFeedback>
                     <TouchableNativeFeedback
                         onPress={this.onCancel.bind(this)}
                         background={TouchableNativeFeedback.Ripple('red', false)}>
-                        <View>
-                            <Text>
-                                Annuler 
-                            </Text>
+                        <View style={{flex:.5, borderLeftColor:'#000', borderLeftWidth:1}}>
+                            <Text style={{textAlign:'center', fontWeight:'bold'}}>Annuler</Text>
                         </View>
                     </TouchableNativeFeedback>
                 </View>
@@ -99,15 +96,35 @@ const styles = StyleSheet.create({
     },
     containerOpen: {
         flex:1,
-        backgroundColor: 'yellow'
+        backgroundColor: '#CCCCCC'
     },
     containerClose: {
         flex:1,
-        backgroundColor: 'green'
+        backgroundColor: '#CCCCCC'
     },
+    openButton: {
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent: 'center'
+    },
+    openButtonText: {
+        color: '#000000',
+        fontSize: 30,
+        marginRight: 10
+    }
+});
+
+const stylesOpen = StyleSheet.create({
+    header: {flexDirection:'row',justifyContent:'center'},
+    headerText: {color:'#000000',fontSize:25},
     formField: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
-    }
+        justifyContent: 'space-between',
+        backgroundColor: '#999',
+        borderTopColor:'#000',
+        borderTopWidth:1
+    },
+    formFieldText: {width:75}
 });
