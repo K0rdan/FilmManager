@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet,Text,View} from 'react-native';
 import Config from '../config.json';
 import Login from './login';
+import NotificationType from './notification/notificationType';
 
 export default class Menu extends Component {
     constructor(props) {
@@ -19,6 +20,23 @@ export default class Menu extends Component {
     }
 
     render() {
+        let notifications = {
+            error: 0,
+            warning: 0,
+            info: 0
+        };
+
+        if(this.props.notificationList){
+            let notifs = this.props.notificationList;
+            for(let i=0; i<notifs.length; i++) {
+                switch(notifs.type) {
+                    case NotificationType.ERROR: notifications.error++; break;
+                    case NotificationType.WARNING: notifications.warning++; break;
+                    case NotificationType.INFO: notifications.info++; break;
+                }
+            }
+        }
+
         return (
             <View style={styles.container}>
                 <View style={{flex:1,flexDirection: 'column',backgroundColor: '#666666'}}>
@@ -26,6 +44,7 @@ export default class Menu extends Component {
                         <Text style={styles.titleText}>
                             Menu
                         </Text>
+                        <Text>Notifications (e:{notifications.error}, w:{notifications.warning}, i:{notifications.info})</Text>
                     </View>
                     <View style={[styles.items, {flex: (this.state.loginOpen ? .5 : .8)}]}>
                         <Text style={styles.itemText}>Item1</Text>
