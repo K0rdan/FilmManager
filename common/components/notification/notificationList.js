@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
-import {StyleSheet, Modal, View, TouchableHighlight, Text, ListView} from 'react-native';
+import {
+    StyleSheet,
+    PanResponder,
+    Animated,
+    View,
+    TouchableHighlight,
+    Text,
+    ListView,
+    TouchableOpacity,
+    LayoutAnimation,
+    Platform,
+    UIManager
+} from 'react-native';
 import Notification from './notification';
 
 export default class NotificationList extends Component {
@@ -7,8 +19,27 @@ export default class NotificationList extends Component {
         super(props);
 
         this.state = {
-            dataSource: this.props.datasource
+            dataSource: this.props.datasource,
+            pan: new Animated.ValueXY(),
+            index: 0,
         };
+
+        if(Platform.OS === 'android')
+            UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
+    onPress(index) {
+        // Uncomment to animate the next state change.
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+        this.setState({index: index});
+    }
+
+    renderButton(index) {
+        return (
+            <TouchableOpacity key={'button' + index} style={styles.button} onPress={() => this.onPress(index)}>
+            <Text>{index}</Text>
+            </TouchableOpacity>
+        );
     }
 
     closeNotification(notification) {
@@ -31,21 +62,70 @@ export default class NotificationList extends Component {
 
     render() {
         const dataSource = new ListView.DataSource({rowHasChanged: (a, b) => a != b}).cloneWithRows(this.state.dataSource);
+
+        var leftStyle = this.state.index === 0 ? {flex: 1} : {width: 20};
+        var middleStyle = this.state.index === 2 ? {width: 20} : {flex: 1};
+        var rightStyle = {flex: 1};
+
+        var whiteHeight = this.state.index * 80;
+            
         return (
-            <Modal transparent={true} onRequestClose={()=>{}} style={styles.container}>
+            <View style={styles.container}>
+                <TouchableHighlight onPress={this.props.hide}>
+                    <Text>Tout fermer</Text>
+                </TouchableHighlight>
+                <ListView dataSource={dataSource} renderRow={(notification) => <Notification data={notification} close={this.closeNotification.bind(this)} />} enableEmptySections={true} />
                 <View>
-                    <TouchableHighlight onPress={this.props.hide}>
-                        <Text>Tout fermer</Text>
-                    </TouchableHighlight>
-                    <ListView dataSource={dataSource} renderRow={(notification) => <Notification data={notification} close={this.closeNotification.bind(this)} />} enableEmptySections={true} />
+                    <View style={styles.topButtons}>
+                        {this.renderButton(0)}
+                        {this.renderButton(1)}
+                        {this.renderButton(2)}
+                    </View>
+                    <View style={styles.content}>
+                        <View style={{flexDirection: 'row', height: 100}}>
+                        <View style={[leftStyle, {backgroundColor: 'firebrick'}]}/>
+                        <View style={[middleStyle, {backgroundColor: 'seagreen'}]}/>
+                        <View style={[rightStyle, {backgroundColor: 'steelblue'}]}/>
+                        </View>
+                        <View style={{height: whiteHeight, justifyContent: 'center', alignItems: 'center', overflow: 'hidden'}} removeClippedSubviews={true}>
+                        <View>
+                            <Text>Stuff Goes Here</Text>
+                        </View>
+                        </View>
+                    </View>
                 </View>
-            </Modal>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-
+        position: 'absolute',
+        width:400,
+        top:0,
+        backgroundColor: 'red',
+        zIndex: 999
+    },
+    topButtons: {
+        marginTop: 22,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'stretch',
+        backgroundColor: 'lightblue'
+    },
+    button: {
+        flex: 1,
+        height: 60,
+        alignSelf: 'stretch',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 8
+    },
+    content: {
+        flex: 1,
+        alignSelf: 'stretch'
     }
 });
