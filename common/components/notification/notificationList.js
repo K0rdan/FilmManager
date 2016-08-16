@@ -20,26 +20,47 @@ export default class NotificationList extends Component {
 
         this.state = {
             dataSource: this.props.datasource,
-            pan: new Animated.ValueXY(),
-            index: 0,
+            open: true
         };
 
         if(Platform.OS === 'android')
             UIManager.setLayoutAnimationEnabledExperimental(true);
     }
 
-    onPress(index) {
-        // Uncomment to animate the next state change.
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-        this.setState({index: index});
+    componentWillMount() {
+        // We are opening the notification list
+        if(this.state.open)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     }
 
-    renderButton(index) {
+    componentDidUpdate() {
+        // We are closing all notifications
+        if(!this.state.open){
+            for(let i=0;i<this.props.datasource.length;i++)
+                this.closeNotification(this.props.datasource[i]);
+        }
+    }
+
+    render() {
+        const dataSource = new ListView.DataSource({rowHasChanged: (a, b) => a != b}).cloneWithRows(this.state.dataSource);
         return (
-            <TouchableOpacity key={'button' + index} style={styles.button} onPress={() => this.onPress(index)}>
-            <Text>{index}</Text>
-            </TouchableOpacity>
+            <View style={[styles.container, {height:(this.state.open ? 400 : 0)}]}>
+                <TouchableHighlight onPress={this.closeAllNotifications.bind(this)}>
+                    <Text>Tout fermer</Text>
+                </TouchableHighlight>
+                <ListView dataSource={dataSource} renderRow={
+                    (notification) => {
+                        return (<Notification data={notification} close={this.closeNotification.bind(this)} />);
+                    }
+                } enableEmptySections={true} />
+            </View>
         );
+    }
+
+    ///// CUSTOM METHODS /////
+    closeAllNotifications() {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+        this.setState({open: false});
     }
 
     closeNotification(notification) {
@@ -58,44 +79,6 @@ export default class NotificationList extends Component {
             this.props.hide();
 
         this.setState({dataSource: notifications});
-    }
-
-    render() {
-        const dataSource = new ListView.DataSource({rowHasChanged: (a, b) => a != b}).cloneWithRows(this.state.dataSource);
-
-        var leftStyle = this.state.index === 0 ? {flex: 1} : {width: 20};
-        var middleStyle = this.state.index === 2 ? {width: 20} : {flex: 1};
-        var rightStyle = {flex: 1};
-
-        var whiteHeight = this.state.index * 80;
-            
-        return (
-            <View style={styles.container}>
-                <TouchableHighlight onPress={this.props.hide}>
-                    <Text>Tout fermer</Text>
-                </TouchableHighlight>
-                <ListView dataSource={dataSource} renderRow={(notification) => <Notification data={notification} close={this.closeNotification.bind(this)} />} enableEmptySections={true} />
-                <View>
-                    <View style={styles.topButtons}>
-                        {this.renderButton(0)}
-                        {this.renderButton(1)}
-                        {this.renderButton(2)}
-                    </View>
-                    <View style={styles.content}>
-                        <View style={{flexDirection: 'row', height: 100}}>
-                        <View style={[leftStyle, {backgroundColor: 'firebrick'}]}/>
-                        <View style={[middleStyle, {backgroundColor: 'seagreen'}]}/>
-                        <View style={[rightStyle, {backgroundColor: 'steelblue'}]}/>
-                        </View>
-                        <View style={{height: whiteHeight, justifyContent: 'center', alignItems: 'center', overflow: 'hidden'}} removeClippedSubviews={true}>
-                        <View>
-                            <Text>Stuff Goes Here</Text>
-                        </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        );
     }
 }
 
