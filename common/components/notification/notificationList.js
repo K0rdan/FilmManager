@@ -13,6 +13,7 @@ import {
     UIManager
 } from 'react-native';
 import Notification from './notification';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class NotificationList extends Component {
     constructor(props){
@@ -44,15 +45,15 @@ export default class NotificationList extends Component {
     render() {
         const dataSource = new ListView.DataSource({rowHasChanged: (a, b) => a != b}).cloneWithRows(this.state.dataSource);
         return (
-            <View style={[styles.container, {height:(this.state.open ? 400 : 0)}]}>
-                <TouchableHighlight onPress={this.closeAllNotifications.bind(this)}>
-                    <Text>Tout fermer</Text>
-                </TouchableHighlight>
+            <View style={[styles.container, (this.state.open ? null : {height: 0})]}>
                 <ListView dataSource={dataSource} renderRow={
                     (notification) => {
                         return (<Notification data={notification} close={this.closeNotification.bind(this)} />);
                     }
                 } enableEmptySections={true} />
+                <TouchableHighlight onPress={this.closeAllNotifications.bind(this)} style={styles.closeButton}>
+                    <Icon name="clear-all" size={45} color="#900" />
+                </TouchableHighlight>
             </View>
         );
     }
@@ -85,30 +86,13 @@ export default class NotificationList extends Component {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        width:400,
         top:0,
-        backgroundColor: 'red',
-        zIndex: 999
+        right:0,
+        zIndex: 999,
+        flex:1,
+        flexDirection: 'column'
     },
-    topButtons: {
-        marginTop: 22,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: 'stretch',
-        backgroundColor: 'lightblue'
-    },
-    button: {
-        flex: 1,
-        height: 60,
-        alignSelf: 'stretch',
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 8
-    },
-    content: {
-        flex: 1,
-        alignSelf: 'stretch'
+    closeButton: {
+        alignSelf: 'flex-end'
     }
 });
